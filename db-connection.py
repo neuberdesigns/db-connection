@@ -54,9 +54,10 @@ dbdata = None
 connection_comand = None
 available = ['mysql']
 parser = argparse.ArgumentParser(description='Connect to a Laravel or Wordpress database using its configuration file')
-parser.add_argument('-f', '--file', action='store', nargs='?', type=argparse.FileType('r'), required=True, help='the configuration file')
+parser.add_argument('--file', '-f', action='store', nargs='?', type=argparse.FileType('r'), required=True, help='the configuration file')
 parser.add_argument('--laravel', action='store_true', default=True, help='if its a Laravel configuration file')
 parser.add_argument('--wordpress', action='store_true', default=False, help='if its a Wordpress configuration file')
+parser.add_argument('--dump', '-d', action='store', default=False, type=argparse.FileType('w'), help='dump the database to the especified file')
 args = parser.parse_args()
 
 
@@ -75,7 +76,12 @@ if not (dbdata['dbname'] in available) :
 	sys.exit()
 
 if dbdata['dbname']=='mysql' :
-	connection_comand = ['mysql', '-h'+dbdata['host'], '-u'+dbdata['user'], '-p'+dbdata['password'], dbdata['database']]
-
+	cmd = dbdata['dbname']
+	
+	if args.dump :
+		cmd = 'mysqldump'
+	
+	connection_comand = [cmd, '-h'+dbdata['host'], '-u'+dbdata['user'], '-p'+dbdata['password'], dbdata['database']]
+	
 if not connection_comand==None :
-	sub.call(connection_comand)
+	sub.call(connection_comand, stdout=args.dump)
