@@ -58,6 +58,7 @@ parser.add_argument('--file', '-f', action='store', nargs='?', type=argparse.Fil
 parser.add_argument('--laravel', action='store_true', default=True, help='if its a Laravel configuration file')
 parser.add_argument('--wordpress', action='store_true', default=False, help='if its a Wordpress configuration file')
 parser.add_argument('--dump', '-d', action='store', default=False, type=argparse.FileType('w'), help='dump the database to the especified file')
+parser.add_argument('--send', '-s', action='store', default=False, type=argparse.FileType('r'), help='import especified file to the database')
 args = parser.parse_args()
 
 
@@ -84,4 +85,4 @@ if dbdata['dbname']=='mysql' :
 	connection_comand = [cmd, '-h'+dbdata['host'], '-u'+dbdata['user'], '-p'+dbdata['password'], dbdata['database']]
 	
 if not connection_comand==None :
-	sub.call(connection_comand, stdout=args.dump)
+	sub.call(connection_comand, stdout=args.dump, stdin=args.send)
