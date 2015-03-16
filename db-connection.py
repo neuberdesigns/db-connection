@@ -26,12 +26,12 @@ def laravelGatherInfo(path):
 def wordpressGatherInfo(file):
 	data = None
 	fileContents = file.read()
-	regexDbHost = "(//)?define\('DB_HOST',\s?'([a-zA-Z0-9_@./-]+)'\)"
-	regexDbName = "(//)?define\('DB_NAME',\s?'([a-zA-Z-1_@-]+)'\)"
+	regexDbName = "(//)?define\('DB_NAME',\s?'([a-zA-Z0-9_@-]+)'\)"
 	regexDbUser = "(//)?define\('DB_USER',\s?'([a-zA-Z0-9_@-]+)'\)"
 	regexDbPass = "(//)?define\('DB_PASSWORD',\s?'([a-zA-Z_0-9@-]+)'\)"
-	
-	host 		= wordpressExtractVarInfo( re.findall(regexDbHost, fileContents) )
+	regexDbHost = "(//)?define\('DB_HOST',\s?'([a-zA-Z0-9_@./-]+)'\)"
+		
+	host 	= wordpressExtractVarInfo( re.findall(regexDbHost, fileContents) )
 	db 		= wordpressExtractVarInfo( re.findall(regexDbName, fileContents) )
 	user 	= wordpressExtractVarInfo( re.findall(regexDbUser, fileContents) )
 	pswd 	= wordpressExtractVarInfo( re.findall(regexDbPass, fileContents) )
